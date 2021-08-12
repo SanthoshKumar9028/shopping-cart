@@ -1,0 +1,26 @@
+.honors {
+  margin: 5em 0;
+}
+.honors > div {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 2em;
+}
+
+.honor {
+  text-align: center;
+  flex-shrink: 0;
+  padding: 1em;
+  flex-basis: 235px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.honor > h3 {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.honor img {
+  width: 100px;
+}

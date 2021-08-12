@@ -1,0 +1,33 @@
+.banner > div {
+  display: flex;
+  min-height: 400px;
+  justify-content: center;
+  align-items: center;
+}
+.banner__title {
+  text-align: center;
+}
+
+.banner__img {
+  display: none;
+  max-width: 300px;
+}
+
+@media screen and (min-width: 500px) {
+  .banner > div {
+    justify-content: space-between;
+  }
+  .banner__title {
+    font-size: 2rem;
+    text-align: left;
+  }
+  .banner__img {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .banner__title {
+    font-size: 3.5rem;
+  }
+}
