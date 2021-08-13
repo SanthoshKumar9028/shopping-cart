@@ -1,4 +1,4 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 
 import { RootState } from "../../app/store";
 import { IProduct } from "./interfaces";
@@ -7,8 +7,8 @@ const initialState: IProduct[] = [
   {
     id: nanoid(),
     name: "wooden table",
-    prize: 123.0,
-    totalQuantity: 4,
+    prize: 999.0,
+    totalQuantity: 2,
     isDivisible: false,
     imageUrl: "/images/wooden-table.jpg",
     description:
@@ -17,8 +17,8 @@ const initialState: IProduct[] = [
   {
     id: nanoid(),
     name: "wooden sofa set",
-    prize: 123.0,
-    totalQuantity: 4,
+    prize: 3200.0,
+    totalQuantity: 1,
     isDivisible: false,
     imageUrl: "/images/wooden-sofa-set.jpg",
     description:
@@ -27,8 +27,8 @@ const initialState: IProduct[] = [
   {
     id: nanoid(),
     name: "three door wardrobe",
-    prize: 123.0,
-    totalQuantity: 4,
+    prize: 4000.0,
+    totalQuantity: 0,
     isDivisible: false,
     imageUrl: "/images/special-three-door-wardrobe.jpg",
     description:
@@ -37,8 +37,8 @@ const initialState: IProduct[] = [
   {
     id: nanoid(),
     name: "wooden student chair",
-    prize: 123.0,
-    totalQuantity: 4,
+    prize: 500.0,
+    totalQuantity: 3,
     isDivisible: false,
     imageUrl: "/images/wooden-student-chair.jpg",
     description:
@@ -46,18 +46,34 @@ const initialState: IProduct[] = [
   },
 ];
 
+type ReduceQuantityPayloadAction = PayloadAction<{
+  id: string;
+  quantity: number;
+}>;
+
 export const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    doNothing(state) {
-      return state;
+    reduceQuantity(state, action: ReduceQuantityPayloadAction) {
+      const { id, quantity } = action.payload;
+      let product = state.find((p) => p.id === id);
+      if (product) {
+        product.totalQuantity -= quantity;
+      }
+    },
+    increaseQuantity(state, action: ReduceQuantityPayloadAction) {
+      const { id, quantity } = action.payload;
+      let product = state.find((p) => p.id === id);
+      if (product) {
+        product.totalQuantity += quantity;
+      }
     },
   },
 });
 
 // actions
-export const { doNothing } = productsSlice.actions;
+export const { increaseQuantity, reduceQuantity } = productsSlice.actions;
 
 // selectors
 export const selectAllProducts = (state: RootState) => state.products;

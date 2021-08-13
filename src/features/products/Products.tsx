@@ -1,11 +1,11 @@
 import { useAppSelector } from "../../app/hooks";
-import Product from "../../components/Product";
+import { Product } from "../../components/Product/Product";
 
 import { selectAllProducts } from "./productsSlice";
 
 function Products() {
   const products = useAppSelector(selectAllProducts);
-
+  // console.log(products);
   return (
     <section className="container">
       {products.map((product) => (

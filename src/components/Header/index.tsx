@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import styles from "./Header.module.css";
 
 function Header() {
@@ -5,23 +7,23 @@ function Header() {
     <header className={styles.header}>
       <div className="container">
         <h1 className={styles.header__title}>
-          <a href="/">Shopping Cart</a>
+          <Link to="/">Shopping Cart</Link>
         </h1>
         <nav className={styles.nav}>
           <ul className={styles.nav__list}>
             <li className={styles.nav__item}>
-              <a href="/products" className={styles.nav__link}>
+              <Link to="/products" className={styles.nav__link}>
                 products
-              </a>
+              </Link>
             </li>
             <li className={styles.nav__item}>
-              <a href="/cart" className={styles.nav__link}>
+              <Link to="/cart" className={styles.nav__link}>
                 <img
                   src="/images/shopping-cart-icon.png"
                   alt="shopping cart icon"
                   className={styles.nav__icon}
                 />
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>
