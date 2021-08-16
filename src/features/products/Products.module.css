@@ -1,0 +1,20 @@
+.searchContainer {
+  max-width: 760px;
+  margin: 2em auto;
+  position: sticky;
+  top: 0.3em;
+}
+
+.searchContainer__input {
+  display: block;
+  font-size: 1.1rem;
+  padding: 0.5em;
+  width: 100%;
+  border-radius: 10rem;
+  border: 1px solid gray;
+  outline: none;
+  box-shadow: 0 2px 5px rgb(0, 0, 0, 0.3);
+}
+.searchContainer__input:focus {
+  border-color: #222;
+}
