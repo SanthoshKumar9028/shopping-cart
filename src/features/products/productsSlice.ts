@@ -8,7 +8,7 @@ const initialState: IProduct[] = [
     id: nanoid(),
     name: "wooden table",
     prize: 999.0,
-    totalQuantity: 2,
+    totalQuantity: 15,
     isDivisible: false,
     imageUrl: "/images/wooden-table.jpg",
     description:
@@ -18,7 +18,7 @@ const initialState: IProduct[] = [
     id: nanoid(),
     name: "wooden sofa set",
     prize: 3200.0,
-    totalQuantity: 1,
+    totalQuantity: 30,
     isDivisible: false,
     imageUrl: "/images/wooden-sofa-set.jpg",
     description:
@@ -38,7 +38,7 @@ const initialState: IProduct[] = [
     id: nanoid(),
     name: "wooden student chair",
     prize: 500.0,
-    totalQuantity: 3,
+    totalQuantity: 15,
     isDivisible: false,
     imageUrl: "/images/wooden-student-chair.jpg",
     description:

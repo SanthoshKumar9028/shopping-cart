@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./Product.module.css";
 import { useAppDispatch } from "../../app/hooks";
@@ -6,73 +6,81 @@ import {
   reduceQuantity,
   increaseQuantity,
 } from "../../features/products/productsSlice";
-import { addToCart, removeFromCart } from "../../features/cart/cartSlice";
+import {
+  addToCart,
+  removeFromCart,
+  setCartQuantity,
+} from "../../features/cart/cartSlice";
 import { ICartProductProps } from "./interfaces";
-import ProductFooterCounter from "./components/ProductFooterCounter";
+import { validateQuantity } from "./validateQuantity";
 import ProductDetails from "./components/ProductDetails";
+import CartProductFooter from "./components/CartProductFooter";
 
 function CartProduct({ product }: ICartProductProps) {
-  const [quantity, setQuantity] = useState("0");
+  const [quantityCounter, setQuantityCounter] = useState("0");
+  const [actionType, setActionType] = useState("add");
+
   const dispatch = useAppDispatch();
 
-  const handleUpdateClick = () => {
-    const payload = { id: product.id, quantity: +quantity };
-    dispatch(addToCart(payload));
-    dispatch(reduceQuantity(payload));
-    setQuantity("0");
+  useEffect(() => {
+    // preventing when no products to add
+    if (actionType === "add" && product.totalQuantity === 0) {
+      setActionType("modify");
+      setQuantityCounter(String(product.quantity));
+    }
+  }, [actionType, product]);
+
+  const handleActionChange: React.ChangeEventHandler<HTMLSelectElement> = (
+    e
+  ) => {
+    const { value } = e.target;
+    setActionType(value);
+    setQuantityCounter(value === "add" ? "0" : String(product.quantity));
   };
+
+  const handleUpdateClick = () => {
+    if (actionType === "modify") {
+      dispatch(setCartQuantity({ id: product.id, quantity: +quantityCounter }));
+      dispatch(
+        increaseQuantity({
+          id: product.id,
+          quantity: product.quantity - +quantityCounter,
+        })
+      );
+    }
+
+    if (+quantityCounter <= 0) return;
+
+    if (actionType === "add") {
+      const payload = { id: product.id, quantity: +quantityCounter };
+      dispatch(addToCart(payload));
+      dispatch(reduceQuantity(payload));
+      setQuantityCounter("0");
+    }
+  };
+
   const handleRemoveClick = () => {
     dispatch(increaseQuantity({ id: product.id, quantity: product.quantity }));
     dispatch(removeFromCart({ id: product.id }));
   };
 
-  const validateQuantity = (count: number) => {
-    if (!isFinite(count)) {
-      return;
-    }
-
-    if (count < 0) {
-      setQuantity("0");
-    } else if (count > product.totalQuantity) {
-      setQuantity(String(product.totalQuantity));
-    } else {
-      setQuantity(String(count));
-    }
+  const options = {
+    value: +quantityCounter,
+    min: 0,
+    max: actionType === "add" ? product.totalQuantity : product.quantity,
+    next: setQuantityCounter,
   };
 
   const handleCounterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    validateQuantity(+e.target.value);
-  };
-  const handleIncClick = () => {
-    validateQuantity(+quantity + 1);
-  };
-  const handleDecClick = () => {
-    validateQuantity(+quantity - 1);
+    validateQuantity({ ...options, value: +e.target.value });
   };
 
-  let footerContent = (
-    <button className={styles.product__outOfStockBtn}>out of stock!</button>
-  );
-  if (product.totalQuantity > 0) {
-    footerContent = (
-      <>
-        <ProductFooterCounter
-          product={product}
-          quantity={quantity}
-          handleCounterChange={handleCounterChange}
-          handleIncClick={handleIncClick}
-          handleDecClick={handleDecClick}
-        />
-        <button
-          className={styles.product__addToCartBtn}
-          onClick={handleUpdateClick}
-          disabled={+quantity === 0}
-        >
-          UPDATE
-        </button>
-      </>
-    );
-  }
+  const handleIncClick = () => {
+    validateQuantity({ ...options, value: options.value + 1 });
+  };
+  const handleDecClick = () => {
+    validateQuantity({ ...options, value: options.value - 1 });
+  };
 
   return (
     <article className={`${styles.product} ${styles["product--cart"]}`}>
@@ -94,13 +102,33 @@ function CartProduct({ product }: ICartProductProps) {
 
       <ProductDetails product={product} />
 
-      <div className={styles.product__footer}>
-        {footerContent}
-        {+quantity > 0 && (
-          <p className={styles.product__cost}>
-            Rs: {(+quantity * product.prize).toFixed(2)}
-          </p>
-        )}
+      <div
+        className={`${styles.product__footer} ${styles["product__footer--cart"]}`}
+      >
+        <select
+          value={actionType}
+          onChange={handleActionChange}
+          className={styles.product__actions}
+        >
+          {product.totalQuantity > 0 && <option value="add">Add</option>}
+          <option value="modify">Modify</option>
+        </select>
+
+        <div>
+          <CartProductFooter
+            min={0}
+            max={
+              actionType === "add" ? product.totalQuantity : product.quantity
+            }
+            product={product}
+            value={+quantityCounter}
+            actionType={actionType}
+            handleCounterChange={handleCounterChange}
+            handleUpdateClick={handleUpdateClick}
+            handleIncClick={handleIncClick}
+            handleDecClick={handleDecClick}
+          />
+        </div>
       </div>
     </article>
   );

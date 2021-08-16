@@ -26,11 +26,17 @@ export const cartSlice = createSlice({
         state.products.splice(index, 1);
       }
     },
+    setCartQuantity(state, { payload }: PayloadAction<CartProduct>) {
+      let index = state.products.findIndex((p) => p.id === payload.id);
+      if (index !== -1) {
+        state.products[index].quantity = payload.quantity;
+      }
+    },
   },
 });
 
 // actions
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, setCartQuantity } = cartSlice.actions;
 
 //selectors
 export const selectCartProducts = createSelector(

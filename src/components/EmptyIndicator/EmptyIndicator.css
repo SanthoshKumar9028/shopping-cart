@@ -1,0 +1,16 @@
+.emptyIndicator {
+  text-align: center;
+  /* position: relative; */
+}
+
+.emptyIndicator__img {
+  max-width: 100px;
+  position: absolute;
+  left: 10%;
+  animation: moveForwardAndBackward 5s infinite alternate;
+}
+@keyframes moveForwardAndBackward {
+  to {
+    left: calc(90% - 100px);
+  }
+}

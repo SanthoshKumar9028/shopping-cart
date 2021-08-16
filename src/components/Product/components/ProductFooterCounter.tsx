@@ -3,8 +3,9 @@ import styles from "../Product.module.css";
 
 function ProductFooterCounter(props: IProductFooterCounterProps) {
   const {
-    product,
-    quantity,
+    min,
+    max,
+    value,
     handleCounterChange,
     handleIncClick,
     handleDecClick,
@@ -15,15 +16,15 @@ function ProductFooterCounter(props: IProductFooterCounterProps) {
       <button
         className={styles.product__incQuantityBtn}
         onClick={handleDecClick}
-        disabled={+quantity <= 0}
+        disabled={value <= min}
       >
         -
       </button>
-      <input type="text" value={quantity} onChange={handleCounterChange} />
+      <input type="text" value={value} onChange={handleCounterChange} />
       <button
         className={styles.product__decQuantityBtn}
         onClick={handleIncClick}
-        disabled={+quantity >= product.totalQuantity}
+        disabled={value >= max}
       >
         +
       </button>

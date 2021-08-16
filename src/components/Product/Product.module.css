@@ -29,6 +29,11 @@
 .product__footer {
   text-align: right;
 }
+.product__footer--cart {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 
 .product__footer input[type="text"] {
   font-size: 1.1rem;
@@ -48,6 +53,12 @@
 .product__decQuantityBtn,
 .product__outOfStockBtn {
   border: none;
+}
+
+.product__actions {
+  padding: 0.5em 1em;
+  text-transform: uppercase;
+  margin-right: 1em;
 }
 
 .product__incQuantityBtn,

@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../app/hooks";
 import { CartProduct } from "../../components/Product";
+import { EmptyIndicator } from "../../components/EmptyIndicator";
 
 import { selectCartProducts } from "./cartSlice";
 
@@ -13,7 +14,14 @@ function CartProducts() {
 
   return (
     <section className="container">
-      {products.length > 0 && <h2>Overall Prize: {overAllPrize} </h2>}
+      {products.length > 0 && (
+        <h2>Overall Prize: {overAllPrize.toFixed(2)} </h2>
+      )}
+
+      {products.length === 0 && (
+        <EmptyIndicator> Empty Cart :( </EmptyIndicator>
+      )}
+
       {products.map((product) => (
         <CartProduct key={product.id} product={product} />
       ))}
