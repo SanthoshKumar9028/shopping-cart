@@ -33,10 +33,22 @@ function CartProduct({ product }: ICartProductProps) {
   );
 
   useEffect(() => {
-    if (product.variants[0]) {
-      setVariantType(product.variants[0].type);
+    if (!product.variants[0]) return;
+
+    for (let variant of product.variants) {
+      if (variant.type === variantType) return;
     }
-  }, [product.variants]);
+
+    setVariantType(product.variants[0].type);
+  }, [product.variants, variantType]);
+
+  useEffect(() => {
+    if (!currentUserSelectedVariant) return;
+    if (currentUserSelectedVariant.quantity === 0 && actionType === "modify") {
+      setActionType("add");
+      setQuantityCounter("0");
+    }
+  }, [currentUserSelectedVariant, actionType]);
 
   useEffect(() => {
     // preventing when no products to add
@@ -182,7 +194,10 @@ function CartProduct({ product }: ICartProductProps) {
           {currentVariant && currentVariant.totalQuantity > 0 && (
             <option value="add">Add</option>
           )}
-          {currentUserSelectedVariant && <option value="modify">Modify</option>}
+          {currentUserSelectedVariant &&
+            currentUserSelectedVariant.quantity > 0 && (
+              <option value="modify">Modify</option>
+            )}
         </select>
 
         {currentVariant && (

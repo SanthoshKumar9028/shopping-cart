@@ -16,18 +16,31 @@ function Product({ product }: IProductProps) {
   const [variantType, setVariantType] = useState(product.variants[0]?.type);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (product.variants[0]) {
-      setVariantType(product.variants[0].type);
-    }
-  }, [product.variants]);
-
-  // no variants to display
-  if (product.variants.length === 0) return null;
-
   const currentVariant = product.variants.find(
     (variant) => variant.type === variantType
   );
+
+  useEffect(() => {
+    // keeping the current selected variant
+    if (!product.variants[0]) return;
+
+    for (let variant of product.variants) {
+      if (variant.type === variantType) return;
+    }
+
+    setVariantType(product.variants[0].type);
+  }, [product.variants, variantType]);
+
+  useEffect(() => {
+    if (!currentVariant) return;
+
+    if (+quantityCounter > currentVariant.totalQuantity) {
+      setQuantityCounter("0");
+    }
+  }, [currentVariant, quantityCounter]);
+
+  // no variants to display
+  if (product.variants.length === 0) return null;
 
   const handleClick = () => {
     const payload = {

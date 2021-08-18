@@ -6,14 +6,9 @@ import ProductPrizeList from "./ProductPrizeList";
 function CartProductsStats({ products }: ICartProductsStatsProps) {
   if (products.length === 0) return null;
 
-  let overAllPrize = products.reduce((prevProductPrize, product) => {
-    let prize = product.selectedVariants.reduce((prevVariantPrize, variant) => {
-      let v = product.variants.find((v) => v.type === variant.type);
-      return prevVariantPrize + variant.quantity * (v?.prize || 0);
-    }, 0);
-    return prevProductPrize + prize;
-  }, 0);
+  let overAllPrize = 0;
 
+  // mearging all product variants with user selected variants
   let productDetails = products.reduce<IProductStatsInfo[]>(
     (prevProductsInfo, product) => {
       let productInfo: IProductStatsInfo = {
@@ -25,6 +20,8 @@ function CartProductsStats({ products }: ICartProductsStatsProps) {
       for (let selectedVariant of product.selectedVariants) {
         for (let variant of product.variants) {
           if (variant.type === selectedVariant.type) {
+            overAllPrize += variant.prize * selectedVariant.quantity;
+
             productInfo.variants.push({
               ...variant,
               ...selectedVariant,

@@ -7,6 +7,7 @@ import {
 
 function ProductVariantsPrizeTable(props: IProductVariantsPrizeTable) {
   if (props.total === 0) return null;
+
   return (
     <table className={styles.variantsTable}>
       <tbody>
