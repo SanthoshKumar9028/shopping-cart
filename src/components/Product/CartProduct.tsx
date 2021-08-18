@@ -15,59 +15,94 @@ import { ICartProductProps } from "./interfaces";
 import { validateQuantity } from "./validateQuantity";
 import ProductDetails from "./components/ProductDetails";
 import CartProductFooter from "./components/CartProductFooter";
+import { VariantsSelect } from "./components/VariantsSelect";
+import Prize from "../Prize";
 
 function CartProduct({ product }: ICartProductProps) {
   const [quantityCounter, setQuantityCounter] = useState("0");
+  const [variantType, setVariantType] = useState(product.variants[0]?.type);
   const [actionType, setActionType] = useState("add");
 
   const dispatch = useAppDispatch();
 
+  const currentVariant = product.variants.find(
+    (variant) => variant.type === variantType
+  );
+  const currentUserSelectedVariant = product.selectedVariants.find(
+    (v) => v.type === currentVariant?.type
+  );
+
   useEffect(() => {
     // preventing when no products to add
-    if (actionType === "add" && product.totalQuantity === 0) {
+    if (!currentVariant || !currentUserSelectedVariant) return;
+
+    if (actionType === "add" && currentVariant.totalQuantity === 0) {
       setActionType("modify");
-      setQuantityCounter(String(product.quantity));
+      setQuantityCounter(String(currentUserSelectedVariant.quantity));
     }
-  }, [actionType, product]);
+  }, [actionType, currentVariant, currentUserSelectedVariant]);
+
+  // no variants to display
+  if (product.variants.length === 0) return null;
 
   const handleActionChange: React.ChangeEventHandler<HTMLSelectElement> = (
     e
   ) => {
     const { value } = e.target;
     setActionType(value);
-    setQuantityCounter(value === "add" ? "0" : String(product.quantity));
+    setQuantityCounter(
+      value === "add" ? "0" : String(currentUserSelectedVariant?.quantity || 0)
+    );
   };
 
   const handleUpdateClick = () => {
-    if (actionType === "modify") {
-      dispatch(setCartQuantity({ id: product.id, quantity: +quantityCounter }));
-      dispatch(
-        increaseQuantity({
-          id: product.id,
-          quantity: product.quantity - +quantityCounter,
-        })
-      );
-    }
-
-    if (+quantityCounter <= 0) return;
+    const payload = {
+      id: product.id,
+      variant: {
+        type: variantType,
+        quantity: +quantityCounter,
+      },
+    };
 
     if (actionType === "add") {
-      const payload = { id: product.id, quantity: +quantityCounter };
+      if (+quantityCounter <= 0) return;
       dispatch(addToCart(payload));
       dispatch(reduceQuantity(payload));
       setQuantityCounter("0");
     }
+
+    if (!currentUserSelectedVariant) return;
+
+    if (actionType === "modify") {
+      dispatch(setCartQuantity(payload));
+      dispatch(
+        increaseQuantity({
+          id: product.id,
+          variant: {
+            type: variantType,
+            quantity: currentUserSelectedVariant.quantity - +quantityCounter,
+          },
+        })
+      );
+    }
   };
 
   const handleRemoveClick = () => {
-    dispatch(increaseQuantity({ id: product.id, quantity: product.quantity }));
+    for (let variant of product.selectedVariants) {
+      dispatch(increaseQuantity({ id: product.id, variant }));
+    }
     dispatch(removeFromCart({ id: product.id }));
   };
+
+  const totalQuantity =
+    actionType === "add"
+      ? currentVariant?.totalQuantity || 0
+      : currentUserSelectedVariant?.quantity || 0;
 
   const options = {
     value: +quantityCounter,
     min: 0,
-    max: actionType === "add" ? product.totalQuantity : product.quantity,
+    max: totalQuantity,
     next: setQuantityCounter,
   };
 
@@ -82,25 +117,53 @@ function CartProduct({ product }: ICartProductProps) {
     validateQuantity({ ...options, value: options.value - 1 });
   };
 
+  const handleChangeVariant: React.ChangeEventHandler<HTMLSelectElement> = (
+    e
+  ) => {
+    setVariantType(e.target.value);
+    setQuantityCounter("0");
+    setActionType("add");
+  };
+
   return (
     <article className={`${styles.product} ${styles["product--cart"]}`}>
       <div className={styles["product--cart__header"]}>
-        <span>
-          Total:{" "}
-          <b>
-            {product.prize.toFixed(2)} x {product.quantity} =
-            {(product.prize * product.quantity).toFixed(2)}
-          </b>
-        </span>
-        <button
-          className={styles.product__removeFromCartBtn}
-          onClick={handleRemoveClick}
-        >
-          X
-        </button>
+        {currentVariant &&
+          currentUserSelectedVariant &&
+          currentUserSelectedVariant.quantity > 0 && (
+            <span>
+              Total:{" "}
+              <b>
+                {currentVariant.prize.toFixed(2)} x{" "}
+                {currentUserSelectedVariant.quantity} =
+                <Prize
+                  value={
+                    currentVariant.prize * currentUserSelectedVariant.quantity
+                  }
+                />
+              </b>
+            </span>
+          )}
+
+        <div className={styles["product--cart__header-variants"]}>
+          <VariantsSelect
+            value={variantType}
+            onChange={handleChangeVariant}
+            variants={product.variants}
+          />
+
+          <button
+            className={styles.product__removeFromCartBtn}
+            onClick={handleRemoveClick}
+          >
+            X
+          </button>
+        </div>
       </div>
 
-      <ProductDetails product={product} />
+      {currentVariant && (
+        <ProductDetails product={product} currentVariant={currentVariant} />
+      )}
 
       <div
         className={`${styles.product__footer} ${styles["product__footer--cart"]}`}
@@ -110,25 +173,29 @@ function CartProduct({ product }: ICartProductProps) {
           onChange={handleActionChange}
           className={styles.product__actions}
         >
-          {product.totalQuantity > 0 && <option value="add">Add</option>}
-          <option value="modify">Modify</option>
+          {currentVariant && currentVariant.totalQuantity > 0 && (
+            <option value="add">Add</option>
+          )}
+          {currentUserSelectedVariant && <option value="modify">Modify</option>}
         </select>
 
-        <div>
-          <CartProductFooter
-            min={0}
-            max={
-              actionType === "add" ? product.totalQuantity : product.quantity
-            }
-            product={product}
-            value={+quantityCounter}
-            actionType={actionType}
-            handleCounterChange={handleCounterChange}
-            handleUpdateClick={handleUpdateClick}
-            handleIncClick={handleIncClick}
-            handleDecClick={handleDecClick}
-          />
-        </div>
+        {currentVariant && (
+          <div>
+            <CartProductFooter
+              min={0}
+              max={totalQuantity}
+              product={product}
+              totalQuantity={totalQuantity}
+              currentVariant={currentVariant}
+              value={+quantityCounter}
+              actionType={actionType}
+              handleCounterChange={handleCounterChange}
+              handleUpdateClick={handleUpdateClick}
+              handleIncClick={handleIncClick}
+              handleDecClick={handleDecClick}
+            />
+          </div>
+        )}
       </div>
     </article>
   );

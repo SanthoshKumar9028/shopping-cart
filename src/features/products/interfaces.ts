@@ -1,9 +1,14 @@
+export interface IVariant {
+  type: string;
+  prize: number;
+  totalQuantity: number;
+  imageUrl: string;
+}
+
 export interface IProduct {
   id: string;
   name: string;
-  prize: number;
-  totalQuantity: number;
+  variants: IVariant[];
   isDivisible: boolean;
   description: string;
-  imageUrl: string;
 }

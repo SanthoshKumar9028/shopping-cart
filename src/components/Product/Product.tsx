@@ -8,21 +8,41 @@ import { IProductProps } from "./interfaces";
 import { validateQuantity } from "./validateQuantity";
 import ProductFooterCounter from "./components/ProductFooterCounter";
 import ProductDetails from "./components/ProductDetails";
+import { VariantsSelect } from "./components/VariantsSelect";
+import Prize from "../Prize";
 
 function Product({ product }: IProductProps) {
   const [quantityCounter, setQuantityCounter] = useState("0");
+  const [variantType, setVariantType] = useState(product.variants[0]?.type);
   const dispatch = useAppDispatch();
 
+  // no variants to display
+  if (product.variants.length === 0) return null;
+
+  const currentVariant = product.variants.find(
+    (variant) => variant.type === variantType
+  );
+
   const handleClick = () => {
-    const payload = { id: product.id, quantity: +quantityCounter };
+    const payload = {
+      id: product.id,
+      variant: { type: variantType, quantity: +quantityCounter },
+    };
+
     dispatch(addToCart(payload));
     dispatch(reduceQuantity(payload));
+    setQuantityCounter("0");
+  };
+  const handleChangeVariant: React.ChangeEventHandler<HTMLSelectElement> = (
+    e
+  ) => {
+    setVariantType(e.target.value);
     setQuantityCounter("0");
   };
 
   const options = {
     min: 0,
-    max: product.totalQuantity,
+    max: currentVariant?.totalQuantity || 0,
     next: setQuantityCounter,
   };
 
@@ -40,12 +60,12 @@ function Product({ product }: IProductProps) {
   let footerContent = (
     <button className={styles.product__outOfStockBtn}>out of stock!</button>
   );
-  if (product.totalQuantity > 0) {
+  if (currentVariant && currentVariant.totalQuantity > 0) {
     footerContent = (
       <>
         <ProductFooterCounter
           min={0}
-          max={product.totalQuantity}
+          max={currentVariant.totalQuantity}
           value={+quantityCounter}
           handleCounterChange={handleCounterChange}
           handleIncClick={handleIncClick}
@@ -64,14 +84,24 @@ function Product({ product }: IProductProps) {
 
   return (
     <article className={styles.product}>
-      <ProductDetails product={product} />
+      <div className={styles.product__variantsContainer}>
+        <VariantsSelect
+          value={variantType}
+          onChange={handleChangeVariant}
+          variants={product.variants}
+        />
+      </div>
+
+      {currentVariant && (
+        <ProductDetails product={product} currentVariant={currentVariant} />
+      )}
 
       <div className={styles.product__footer}>
         {footerContent}
 
-        {+quantityCounter > 0 && (
+        {currentVariant && +quantityCounter > 0 && (
           <p className={styles.product__cost}>
-            Rs: {(+quantityCounter * product.prize).toFixed(2)}
+            Rs: <Prize value={+quantityCounter * currentVariant.prize} />
           </p>
         )}
       </div>

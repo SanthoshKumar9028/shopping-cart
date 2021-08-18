@@ -36,13 +36,13 @@ function Products() {
     product.name.trim().includes(searchText)
   );
 
-  products = products.filter(
-    (product) => showOutOfStock || product.totalQuantity !== 0
-  );
+  // products = products.filter(
+  //   (product) => showOutOfStock || product.totalQuantity !== 0
+  // );
 
-  products = products.filter(
-    (product) => min <= product.prize && product.prize <= max
-  );
+  // products = products.filter(
+  //   (product) => min <= product.prize && product.prize <= max
+  // );
 
   return (
     <section className="container">

@@ -1,8 +1,9 @@
 import styles from "../Product.module.css";
 import { IProductDetailsProps } from "../interfaces";
 
-function ProductDetails({ product }: IProductDetailsProps) {
-  const { name, prize, imageUrl, totalQuantity, description } = product;
+function ProductDetails({ product, currentVariant }: IProductDetailsProps) {
+  const { name, description } = product;
+  const { prize, imageUrl, totalQuantity } = currentVariant;
 
   return (
     <>

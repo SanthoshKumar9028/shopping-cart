@@ -3,15 +3,23 @@ import ProductFooterCounter from "./ProductFooterCounter";
 import { ICartProductFooterProps } from "../interfaces";
 
 function CartProductFooter(props: ICartProductFooterProps) {
-  const { value, handleUpdateClick, actionType, product, ...rest } = props;
+  const {
+    value,
+    totalQuantity,
+    currentVariant,
+    handleUpdateClick,
+    actionType,
+    product,
+    ...rest
+  } = props;
 
-  if (actionType === "add" && product.totalQuantity === 0) {
+  if (actionType === "add" && totalQuantity === 0) {
     return null;
   }
 
   let showCurrentRupee =
     (actionType === "add" && value > 0) ||
-    (actionType === "modify" && value < product.quantity);
+    (actionType === "modify" && value < rest.max);
 
   return (
     <>
@@ -22,7 +30,7 @@ function CartProductFooter(props: ICartProductFooterProps) {
         onClick={handleUpdateClick}
         disabled={
           (actionType === "add" && value === 0) ||
-          (actionType === "modify" && value === product.quantity)
+          (actionType === "modify" && value === totalQuantity)
         }
       >
         {actionType === "add" ? "ADD TO CART" : "UPDATE CART"}
@@ -30,7 +38,7 @@ function CartProductFooter(props: ICartProductFooterProps) {
 
       {showCurrentRupee && (
         <p className={styles.product__cost}>
-          Rs: {(value * product.prize).toFixed(2)}
+          Rs: {(value * currentVariant.prize).toFixed(2)}
         </p>
       )}
     </>

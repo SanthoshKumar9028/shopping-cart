@@ -1,15 +1,26 @@
-import { IProduct } from "../../features/products/interfaces";
+import {
+  ISelectedProducts,
+  ISelectedVariant,
+} from "../../features/cart/interfaces";
+import { IProduct, IVariant } from "../../features/products/interfaces";
 
 export interface IProductProps {
   product: IProduct;
 }
 
 export interface ICartProductProps {
-  product: IProduct & { quantity: number };
+  product: IProduct & ISelectedProducts;
 }
 
 export interface IProductDetailsProps {
   product: IProduct;
+  currentVariant: IVariant;
+}
+
+export interface IVariantsSelectProps {
+  variants: IVariant[];
+  value: string;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 export interface IProductFooterCounterProps {
@@ -23,7 +34,9 @@ export interface IProductFooterCounterProps {
 
 export interface ICartProductFooterProps extends IProductFooterCounterProps {
   actionType: string;
-  product: IProduct & { quantity: number };
+  totalQuantity: number;
+  currentVariant: IVariant;
+  product: IProduct & ISelectedProducts;
   handleUpdateClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 

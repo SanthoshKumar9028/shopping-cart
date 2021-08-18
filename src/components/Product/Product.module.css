@@ -16,6 +16,9 @@
   display: flex;
   justify-content: space-between;
 }
+.product--cart__header-variants {
+  margin-left: auto;
+}
 
 .product__name {
   text-transform: capitalize;
@@ -24,6 +27,14 @@
   width: 150px;
   padding: 0 0.2em 0.2em 0;
   float: left;
+}
+
+.product__variantsContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+.product__variants > select {
+  padding: 0.3em;
 }
 
 .product__footer {
