@@ -54,7 +54,11 @@ function ProductPrizeList({ products }: IProductPrizeListProps) {
           <li key={id}>
             <details>
               <summary>
-                {name}: total = <Prize value={total} />
+                <span className={styles.prizeList__title}>{name}</span> (total :{" "}
+                <b>
+                  <Prize value={total} />
+                </b>
+                )
               </summary>
               <ProductVariantsPrizeTable variants={variants} total={total} />
             </details>

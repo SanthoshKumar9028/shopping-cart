@@ -12,3 +12,9 @@ export interface IProduct {
   isDivisible: boolean;
   description: string;
 }
+
+export interface IFilterArgs {
+  products: IProduct[];
+  cb: (a: IVariant) => boolean;
+  performFilter?: boolean;
+}

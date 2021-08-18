@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import styles from "./Product.module.css";
 import { useAppDispatch } from "../../app/hooks";
@@ -15,6 +15,12 @@ function Product({ product }: IProductProps) {
   const [quantityCounter, setQuantityCounter] = useState("0");
   const [variantType, setVariantType] = useState(product.variants[0]?.type);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (product.variants[0]) {
+      setVariantType(product.variants[0].type);
+    }
+  }, [product.variants]);
 
   // no variants to display
   if (product.variants.length === 0) return null;

@@ -11,6 +11,24 @@ import {
 import { EmptyIndicator } from "../../components/EmptyIndicator";
 import { Product } from "../../components/Product/Product";
 import Filter from "../filter/Filter";
+import { IFilterArgs } from "./interfaces";
+
+function filter({ products, cb, performFilter }: IFilterArgs) {
+  return products.map((product) => {
+    if (!performFilter) return product;
+
+    let newProduct = { ...product };
+
+    newProduct.variants = newProduct.variants.filter((variant) => {
+      return cb(variant);
+    });
+
+    if (product.variants.length === newProduct.variants.length) {
+      return product;
+    }
+    return newProduct;
+  });
+}
 
 function Products() {
   const [searchText, setSearchText] = useState("");
@@ -33,16 +51,22 @@ function Products() {
 
   // filtering based on search text
   products = products.filter((product) =>
-    product.name.trim().includes(searchText)
+    product.name.trim().includes(searchText.trim())
   );
 
-  // products = products.filter(
-  //   (product) => showOutOfStock || product.totalQuantity !== 0
-  // );
+  products = filter({
+    products,
+    performFilter: !showOutOfStock,
+    cb: (variant) => variant.totalQuantity !== 0,
+  });
 
-  // products = products.filter(
-  //   (product) => min <= product.prize && product.prize <= max
-  // );
+  products = filter({
+    products,
+    performFilter: true,
+    cb: (variant) => {
+      return min <= variant.prize && variant.prize <= max;
+    },
+  });
 
   return (
     <section className="container">

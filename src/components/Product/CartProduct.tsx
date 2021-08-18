@@ -33,6 +33,12 @@ function CartProduct({ product }: ICartProductProps) {
   );
 
   useEffect(() => {
+    if (product.variants[0]) {
+      setVariantType(product.variants[0].type);
+    }
+  }, [product.variants]);
+
+  useEffect(() => {
     // preventing when no products to add
     if (!currentVariant || !currentUserSelectedVariant) return;
 

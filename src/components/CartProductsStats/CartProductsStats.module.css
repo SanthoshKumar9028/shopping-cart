@@ -22,8 +22,12 @@
 .variantsTable tr:nth-child(odd) {
   background-color: #ddd;
 }
+.prizeList__title {
+  text-transform: capitalize;
+}
 .variantsTable tr td:first-child {
   text-align: left;
+  text-transform: capitalize;
 }
 
 .variantsTable th,
