@@ -1,10 +1,12 @@
-import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 
 import { RootState } from "../../app/store";
 import {
   ICartState,
   PayloadSelectedVariant,
   ISelectedProducts,
+  RemoveFromCartPayload,
+  RemoveVariantFromCartPayload,
 } from "./interfaces";
 
 const initialState: ICartState = {
@@ -36,10 +38,31 @@ export const cartSlice = createSlice({
         product.selectedVariants.push(payload.variant);
       }
     },
-    removeFromCart(state, { payload }: PayloadAction<{ id: string }>) {
+
+    removeFromCart(state, { payload }: RemoveFromCartPayload) {
       let index = state.products.findIndex((p) => p.id === payload.id);
-      if (index !== -1) {
-        state.products.splice(index, 1);
+      if (index === -1) return;
+
+      state.products.splice(index, 1);
+    },
+
+    removeVariantFromCart(
+      { products },
+      { payload }: RemoveVariantFromCartPayload
+    ) {
+      let productIndex = products.findIndex((p) => p.id === payload.id);
+      if (productIndex === -1) return;
+
+      const product = products[productIndex];
+      let variantIndex = product.selectedVariants.findIndex(
+        (variant) => variant.type === payload.variant.type
+      );
+
+      if (variantIndex === -1) return;
+      product.selectedVariants.splice(variantIndex, 1);
+
+      if (products[productIndex].selectedVariants.length === 0) {
+        products.splice(productIndex, 1);
       }
     },
 
@@ -68,7 +91,12 @@ export const cartSlice = createSlice({
 });
 
 // actions
-export const { addToCart, removeFromCart, setCartQuantity } = cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  removeVariantFromCart,
+  setCartQuantity,
+} = cartSlice.actions;
 
 //selectors
 export const selectCartProducts = createSelector(

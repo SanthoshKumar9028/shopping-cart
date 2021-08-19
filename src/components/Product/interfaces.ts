@@ -1,7 +1,4 @@
-import {
-  ISelectedProducts,
-  ISelectedVariant,
-} from "../../features/cart/interfaces";
+import { ISelectedProducts } from "../../features/cart/interfaces";
 import { IProduct, IVariant } from "../../features/products/interfaces";
 
 export interface IProductProps {
@@ -27,17 +24,9 @@ export interface IProductFooterCounterProps {
   min: number;
   max: number;
   value: number;
-  handleCounterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleIncClick: React.MouseEventHandler<HTMLButtonElement>;
-  handleDecClick: React.MouseEventHandler<HTMLButtonElement>;
-}
-
-export interface ICartProductFooterProps extends IProductFooterCounterProps {
-  actionType: string;
-  totalQuantity: number;
-  currentVariant: IVariant;
-  product: IProduct & ISelectedProducts;
-  handleUpdateClick: React.MouseEventHandler<HTMLButtonElement>;
+  onCounterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onIncClick: React.MouseEventHandler<HTMLButtonElement>;
+  onDecClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export interface IValidateQuantityOptions {

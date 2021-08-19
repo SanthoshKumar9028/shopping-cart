@@ -1,6 +1,6 @@
 export interface IVariant {
   type: string;
-  prize: number;
+  price: number;
   totalQuantity: number;
   imageUrl: string;
 }

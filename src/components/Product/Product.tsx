@@ -7,9 +7,9 @@ import { addToCart } from "../../features/cart/cartSlice";
 import { IProductProps } from "./interfaces";
 import { validateQuantity } from "./validateQuantity";
 import ProductFooterCounter from "./components/ProductFooterCounter";
-import ProductDetails from "./components/ProductDetails";
+import { ProductDetails } from "./components/ProductDetails";
 import { VariantsSelect } from "./components/VariantsSelect";
-import Prize from "../Prize";
+import { Price } from "../Price";
 
 function Product({ product }: IProductProps) {
   const [quantityCounter, setQuantityCounter] = useState("0");
@@ -86,9 +86,9 @@ function Product({ product }: IProductProps) {
           min={0}
           max={currentVariant.totalQuantity}
           value={+quantityCounter}
-          handleCounterChange={handleCounterChange}
-          handleIncClick={handleIncClick}
-          handleDecClick={handleDecClick}
+          onCounterChange={handleCounterChange}
+          onIncClick={handleIncClick}
+          onDecClick={handleDecClick}
         />
         <button
           className={styles.product__addToCartBtn}
@@ -120,7 +120,7 @@ function Product({ product }: IProductProps) {
 
         {currentVariant && +quantityCounter > 0 && (
           <p className={styles.product__cost}>
-            Rs: <Prize value={+quantityCounter * currentVariant.prize} />
+            Rs: <Price value={+quantityCounter * currentVariant.price} />
           </p>
         )}
       </div>

@@ -16,13 +16,19 @@
   display: flex;
   justify-content: space-between;
 }
-.product--cart__header-variants {
-  margin-left: auto;
+
+.product--cart__header > p {
+  margin: 0;
 }
 
 .product__name {
   text-transform: capitalize;
 }
+
+.product__variantType {
+  font-size: 1rem;
+}
+
 .product__img {
   width: 150px;
   padding: 0 0.2em 0.2em 0;
@@ -39,11 +45,6 @@
 
 .product__footer {
   text-align: right;
-}
-.product__footer--cart {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
 }
 
 .product__footer input[type="text"] {

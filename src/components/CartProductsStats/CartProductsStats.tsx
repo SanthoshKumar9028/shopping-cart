@@ -1,12 +1,12 @@
-import Prize from "../Prize";
+import { Price } from "../Price";
 import styles from "./CartProductsStats.module.css";
 import { ICartProductsStatsProps, IProductStatsInfo } from "./interfaces";
-import ProductPrizeList from "./ProductPrizeList";
+import ProductPriceList from "./ProductPriceList";
 
 function CartProductsStats({ products }: ICartProductsStatsProps) {
   if (products.length === 0) return null;
 
-  let overAllPrize = 0;
+  let overAllPrice = 0;
 
   // mearging all product variants with user selected variants
   let productDetails = products.reduce<IProductStatsInfo[]>(
@@ -20,7 +20,7 @@ function CartProductsStats({ products }: ICartProductsStatsProps) {
       for (let selectedVariant of product.selectedVariants) {
         for (let variant of product.variants) {
           if (variant.type === selectedVariant.type) {
-            overAllPrize += variant.prize * selectedVariant.quantity;
+            overAllPrice += variant.price * selectedVariant.quantity;
 
             productInfo.variants.push({
               ...variant,
@@ -37,14 +37,14 @@ function CartProductsStats({ products }: ICartProductsStatsProps) {
   );
 
   return (
-    <section className={styles.prizeStatsContainer}>
+    <section className={styles.priceStatsContainer}>
       <details>
         <summary>
-          <h2 className={styles.overAllPrizeText}>
-            Overall Prize: <Prize value={overAllPrize} />
+          <h2 className={styles.overAllPriceText}>
+            Overall Price: <Price value={overAllPrice} />
           </h2>
         </summary>
-        <ProductPrizeList products={productDetails} />
+        <ProductPriceList products={productDetails} />
       </details>
     </section>
   );

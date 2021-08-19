@@ -1,15 +1,15 @@
-.prizeStatsContainer summary {
+.priceStatsContainer summary {
   cursor: pointer;
   user-select: none;
 }
-.overAllPrizeText {
+.overAllPriceText {
   display: inline-block;
 }
-.prizeList {
+.priceList {
   margin: 0;
   list-style-type: none;
 }
-.prizeList > li {
+.priceList > li {
   margin-bottom: 1em;
 }
 
@@ -22,7 +22,7 @@
 .variantsTable tr:nth-child(odd) {
   background-color: #ddd;
 }
-.prizeList__title {
+.priceList__title {
   text-transform: capitalize;
 }
 .variantsTable tr td:first-child {

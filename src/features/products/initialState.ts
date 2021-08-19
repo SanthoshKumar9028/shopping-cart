@@ -8,19 +8,19 @@ export const initialState: IProduct[] = [
     variants: [
       {
         type: "normal",
-        prize: 999.0,
+        price: 999.0,
         totalQuantity: 10,
         imageUrl: "/images/wooden-table.jpg",
       },
       {
-        type: "scrolling wheel",
-        prize: 1200.0,
+        type: "with scrolling wheel",
+        price: 1200.0,
         totalQuantity: 3,
         imageUrl: "/images/wooden-table.jpg",
       },
       {
-        type: "scrolling wheel and varnish",
-        prize: 1300.0,
+        type: "with scrolling wheel and varnish",
+        price: 1300.0,
         totalQuantity: 1,
         imageUrl: "/images/wooden-table.jpg",
       },
@@ -35,13 +35,13 @@ export const initialState: IProduct[] = [
     variants: [
       {
         type: "normal",
-        prize: 3200.0,
+        price: 3200.0,
         totalQuantity: 4,
         imageUrl: "/images/wooden-sofa-set.jpg",
       },
       {
         type: "with billow set",
-        prize: 3500.0,
+        price: 3500.0,
         totalQuantity: 2,
         imageUrl: "/images/wooden-sofa-set.jpg",
       },
@@ -56,13 +56,13 @@ export const initialState: IProduct[] = [
     variants: [
       {
         type: "normal",
-        prize: 4000.0,
+        price: 4000.0,
         totalQuantity: 4,
         imageUrl: "/images/special-three-door-wardrobe.jpg",
       },
       {
         type: "without glass door",
-        prize: 3500.0,
+        price: 3500.0,
         totalQuantity: 2,
         imageUrl: "/images/special-three-door-wardrobe.jpg",
       },
@@ -77,25 +77,25 @@ export const initialState: IProduct[] = [
     variants: [
       {
         type: "normal",
-        prize: 500.0,
+        price: 500.0,
         totalQuantity: 15,
         imageUrl: "/images/wooden-student-chair.jpg",
       },
       {
         type: "with cushion",
-        prize: 600.0,
+        price: 600.0,
         totalQuantity: 6,
         imageUrl: "/images/wooden-student-chair.jpg",
       },
       {
-        type: "scrolling wheel",
-        prize: 650.0,
+        type: "with scrolling wheel",
+        price: 650.0,
         totalQuantity: 3,
         imageUrl: "/images/wooden-student-chair.jpg",
       },
       {
-        type: "scrolling wheel and varnish",
-        prize: 890.0,
+        type: "with scrolling wheel and varnish",
+        price: 890.0,
         totalQuantity: 1,
         imageUrl: "/images/wooden-student-chair.jpg",
       },

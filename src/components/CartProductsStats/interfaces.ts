@@ -16,11 +16,11 @@ export interface IProductStatsInfo {
   variants: ProductInfoVariant[];
 }
 
-export interface IProductPrizeListProps {
+export interface IProductPriceListProps {
   products: IProductStatsInfo[];
 }
 
-export interface IProductVariantsPrizeTable {
+export interface IProductVariantsPriceTable {
   total: number;
   variants: ProductInfoVariant[];
 }

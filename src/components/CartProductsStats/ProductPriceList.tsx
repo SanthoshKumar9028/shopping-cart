@@ -1,11 +1,11 @@
-import Prize from "../Prize";
+import { Price } from "../Price";
 import styles from "./CartProductsStats.module.css";
 import {
-  IProductPrizeListProps,
-  IProductVariantsPrizeTable,
+  IProductPriceListProps,
+  IProductVariantsPriceTable,
 } from "./interfaces";
 
-function ProductVariantsPrizeTable(props: IProductVariantsPrizeTable) {
+function ProductVariantsPriceTable(props: IProductVariantsPriceTable) {
   if (props.total === 0) return null;
 
   return (
@@ -14,19 +14,19 @@ function ProductVariantsPrizeTable(props: IProductVariantsPrizeTable) {
         <tr>
           <th>Variant</th>
           <th>Quantity</th>
-          <th>Prize</th>
+          <th>Price</th>
           <th>Total</th>
         </tr>
 
-        {props.variants.map(({ type, prize, quantity }) => {
+        {props.variants.map(({ type, price, quantity }) => {
           if (quantity === 0) return null;
           return (
             <tr key={type}>
               <td>{type}</td>
               <td>{quantity}</td>
-              <td>{prize}</td>
+              <td>{price}</td>
               <td>
-                <Prize value={prize * quantity} />
+                <Price value={price * quantity} />
               </td>
             </tr>
           );
@@ -36,7 +36,7 @@ function ProductVariantsPrizeTable(props: IProductVariantsPrizeTable) {
           <td colSpan={3}></td>
           <td>
             <b>
-              <Prize value={props.total} />
+              <Price value={props.total} />
             </b>
           </td>
         </tr>
@@ -45,23 +45,23 @@ function ProductVariantsPrizeTable(props: IProductVariantsPrizeTable) {
   );
 }
 
-function ProductPrizeList({ products }: IProductPrizeListProps) {
+function ProductPriceList({ products }: IProductPriceListProps) {
   return (
-    <ul className={styles.prizeList}>
+    <ul className={styles.priceList}>
       {products.map(({ id, name, variants }) => {
-        let total = variants.reduce((p, c) => p + c.prize * c.quantity, 0);
+        let total = variants.reduce((p, c) => p + c.price * c.quantity, 0);
 
         return (
           <li key={id}>
             <details>
               <summary>
-                <span className={styles.prizeList__title}>{name}</span> (total :{" "}
+                <span className={styles.priceList__title}>{name}</span> (total :{" "}
                 <b>
-                  <Prize value={total} />
+                  <Price value={total} />
                 </b>
                 )
               </summary>
-              <ProductVariantsPrizeTable variants={variants} total={total} />
+              <ProductVariantsPriceTable variants={variants} total={total} />
             </details>
           </li>
         );
@@ -69,4 +69,4 @@ function ProductPrizeList({ products }: IProductPrizeListProps) {
     </ul>
   );
 }
-export default ProductPrizeList;
+export default ProductPriceList;

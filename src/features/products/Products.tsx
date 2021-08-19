@@ -64,7 +64,7 @@ function Products() {
     products,
     performFilter: true,
     cb: (variant) => {
-      return min <= variant.prize && variant.prize <= max;
+      return min <= variant.price && variant.price <= max;
     },
   });
 
