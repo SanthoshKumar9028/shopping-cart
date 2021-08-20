@@ -13,6 +13,7 @@ function CartProduct({ product }: ICartProductProps) {
         return { ...selectedVariant, ...variant };
       }
     }
+    return null;
   });
 
   return (
